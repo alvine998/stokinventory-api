@@ -24,5 +24,6 @@ db.users = require("./users.js")(sequelize, Sequelize);
 db.products = require("./products.js")(sequelize, Sequelize);
 db.partners = require("./partners.js")(sequelize, Sequelize);
 db.stores = require("./stores.js")(sequelize, Sequelize);
+db.stocks = require("./stocks.js")(sequelize, Sequelize);
 
 module.exports = db;
