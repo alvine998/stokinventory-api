@@ -1,52 +1,40 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('talents', {
+  return sequelize.define('deliveries', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    name: {
+    partner_code: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    username: {
-      type: DataTypes.STRING(250),
+    stocks: {
+      type: DataTypes.JSON,
       allowNull: false
     },
-    email: {
-      type: DataTypes.STRING(250),
+    deliver_at: {
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
-    phone: {
-      type: DataTypes.STRING(13),
-      allowNull: false
-    },
-    password: {
-      type: DataTypes.STRING(250),
-      allowNull: false
-    },
-    address: {
-      type: DataTypes.STRING(250),
-      allowNull: false
-    },
-    age: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    occupation: {
-      type: DataTypes.STRING(250),
+    arrived_at: {
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
-    verified_at: {
-      type: DataTypes.DATE,
-      allowNull: true
+    image: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    delivered_by: {
+      type: DataTypes.JSON,
+      allowNull: false
     },
     status: {
       type: DataTypes.TINYINT,
       allowNull: false,
-      defaultValue: 1
+      defaultValue: 0
     },
     created_on: {
       type: DataTypes.DATE,
@@ -64,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'talents',
+    tableName: 'deliveries',
     timestamps: false,
     indexes: [
       {

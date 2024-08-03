@@ -1,37 +1,35 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('admins', {
+  return sequelize.define('stores', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
+    partner_code: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
     name: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    email: {
+    code: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    username: {
+    address: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    password: {
+    lat: {
       type: DataTypes.STRING(250),
-      allowNull: false
+      allowNull: true
     },
-    role: {
-      type: DataTypes.ENUM('admin','super_admin'),
-      allowNull: false,
-      defaultValue: "admin"
-    },
-    status: {
-      type: DataTypes.TINYINT,
-      allowNull: false,
-      defaultValue: 1
+    long: {
+      type: DataTypes.STRING(250),
+      allowNull: true
     },
     created_on: {
       type: DataTypes.DATE,
@@ -49,7 +47,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'admins',
+    tableName: 'stores',
     timestamps: false,
     indexes: [
       {

@@ -1,6 +1,6 @@
 
 const db = require('../models')
-const talents = db.talents
+const users = db.users
 const Op = db.Sequelize.Op
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -12,20 +12,20 @@ exports.list = async (req, res) => {
         const page = +req.query.page || 0;
         const offset = size * page;
 
-        const result = await talents.findAndCountAll({
+        const result = await users.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
-                ...req.query.id && { id: { [Op.eq]: req.query.id } },
-                ...req.query.age && { age: { [Op.eq]: req.query.age } },
-                ...req.query.status && { status: { [Op.eq]: req.query.status } },
-                ...req.query.verified == '1' && { verified_at: { [Op.not]: null } },
-                ...req.query.verified == '0' && { verified_at: { [Op.is]: null } },
+                partner_code: { [Op.eq]: req.header("x-partner-code") },
+                ...req.query.id && { id: { [Op.in]: req.query.id.split(",") } },
+                ...req.query.role && { role: { [Op.in]: req.query.role.split(",") } },
+                ...req.query.store_id && { store_id: { [Op.in]: req.query.store_id.split(",") } },
+                ...req.query.gender && { gender: { [Op.eq]: req.query.gender } },
+                ...req.query.status && { status: { [Op.in]: req.query.status.split(",") } },
                 ...req.query.search && {
                     [Op.or]: [
                         { name: { [Op.like]: `%${req.query.search}%` } },
                         { email: { [Op.like]: `%${req.query.search}%` } },
                         { phone: { [Op.like]: `%${req.query.search}%` } },
-                        { username: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
@@ -55,7 +55,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'username', 'email', 'phone', 'address', 'age', 'password']?.map(value => {
+        ['name', 'phone', 'email', 'password', 'gender', 'role']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
@@ -64,16 +64,15 @@ exports.create = async (req, res) => {
                 })
             }
         })
-        const existUser = await talents.findOne({
+        const existUser = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 email: { [Op.eq]: req.body.email },
-                username: { [Op.eq]: req.body.username },
-                phone: { [Op.eq]: req.body.phone },
+                phone: { [Op.eq]: req.body.phone }
             }
         })
         if (existUser) {
-            return res.status(400).send({ message: "Email / Username Telah Terdaftar!" })
+            return res.status(400).send({ message: "Email / No Telepon Telah Terdaftar!" })
         }
         const salt = await bcrypt.genSalt(10)
         const password = await bcrypt.hash(req.body.password, salt)
@@ -81,7 +80,7 @@ exports.create = async (req, res) => {
             ...req.body,
             password: password
         };
-        const result = await talents.create(payload)
+        const result = await users.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -96,7 +95,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await talents.findOne({
+        const result = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id },
@@ -120,7 +119,7 @@ exports.update = async (req, res) => {
                 updated_on: new Date()
             }
         }
-        const onUpdate = await talents.update(payload, {
+        const onUpdate = await users.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -136,7 +135,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const result = await talents.findOne({
+        const result = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }
@@ -151,23 +150,24 @@ exports.delete = async (req, res) => {
         res.status(200).send({ message: "Berhasil hapus data" })
         return
     } catch (error) {
-        console.log(error);
-        res.status(500).send({ message: "Gagal mendapatkan data", error: error })
-        return 
+        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
 
 exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        if (!username || !password) {
-            return res.status(400).send({ message: "Masukkan Username dan Password!" })
+        const { identity, password } = req.body;
+        if (!identity || !password) {
+            return res.status(400).send({ message: "Masukkan Email / No Telepon dan Password!" })
         }
-        const result = await talents.findOne({
+        const result = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 status: { [Op.eq]: 1 },
-                username: { [Op.eq]: req.body.username }
+                [Op.or]: [
+                    { email: { [Op.eq]: req.query.identity } },
+                    { phone: { [Op.eq]: req.query.identity } }
+                ]
             },
         })
         if (!result) {
@@ -177,46 +177,20 @@ exports.login = async (req, res) => {
         if (!isCompare) {
             return res.status(404).send({ message: "Password Salah!" })
         }
-        const result2 = await talents.findOne({
+        const result2 = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 status: { [Op.eq]: 1 },
-                username: { [Op.eq]: req.body.username }
+                [Op.or]: [
+                    { email: { [Op.eq]: req.query.identity } },
+                    { phone: { [Op.eq]: req.query.identity } }
+                ]
             },
             attributes: { exclude: ['deleted', 'password'] },
         })
         return res.status(200).send({ message: "Berhasil Login", user: result2 })
     } catch (error) {
         console.log(error);
-        return res.status(500).send({ message: "Gagal mendapatkan data", error: error })
-    }
-}
-
-exports.verificationTalent = async (req, res) => {
-    try {
-        const result = await talents.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id },
-                email: { [Op.eq]: req.body.email },
-            }
-        })
-        if (!result) {
-            return res.status(400).send({ message: "Data tidak ditemukan!" })
-        }
-        const onUpdate = await talents.update({
-            verified_at: new Date(),
-            updated_on: new Date()
-        }, {
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id }
-            }
-        })
-        res.status(200).send({ message: "Verifikasi Berhasil", update: onUpdate })
-        return
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({ message: "Gagal mendapatkan data", error: error })
+        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
