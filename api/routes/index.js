@@ -21,7 +21,7 @@ module.exports = (app) => {
     app.post('/user', middlewareHere, middlewarePartnerCode, cUser.create);
     app.patch('/user', middlewareHere, middlewarePartnerCode, cUser.update);
     app.delete('/user', middlewareHere, middlewarePartnerCode, cUser.delete);
-    app.post('/user/auth', middlewareHere, middlewarePartnerCode, cUser.login);
+    app.post('/user/auth', middlewareHere, cUser.login);
 
     app.get('/stores', middlewareHere, middlewarePartnerCode, cStore.list);
     app.post('/store', middlewareHere, middlewarePartnerCode, cStore.create);
