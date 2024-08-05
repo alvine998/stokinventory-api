@@ -16,12 +16,6 @@ function initModels(sequelize) {
   var stores = _stores(sequelize, DataTypes);
   var users = _users(sequelize, DataTypes);
 
-  stocks.belongsTo(products, { as: "product", foreignKey: "product_id"});
-  products.hasMany(stocks, { as: "stocks", foreignKey: "product_id"});
-  stocks.belongsTo(stores, { as: "store", foreignKey: "store_id"});
-  stores.hasMany(stocks, { as: "stocks", foreignKey: "store_id"});
-  users.belongsTo(stores, { as: "store", foreignKey: "store_id"});
-  stores.hasMany(users, { as: "users", foreignKey: "store_id"});
 
   return {
     deliveries,

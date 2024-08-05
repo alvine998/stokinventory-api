@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('stocks', {
     id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -10,29 +11,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    product_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'products',
-        key: 'id'
-      }
-    },
-    product_name: {
-      type: DataTypes.STRING(250),
-      allowNull: false
-    },
-    product_code: {
-      type: DataTypes.STRING(250),
+    products: {
+      type: DataTypes.JSON,
       allowNull: false
     },
     store_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'stores',
-        key: 'id'
-      }
+      allowNull: true
     },
     store_name: {
       type: DataTypes.STRING(250),
@@ -47,16 +32,16 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    image: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     type: {
       type: DataTypes.ENUM('in','out'),
       allowNull: false
-    },
-    expired_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
     },
     status: {
       type: DataTypes.TINYINT,
@@ -83,17 +68,11 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "product_id",
+        name: "PRIMARY",
+        unique: true,
         using: "BTREE",
         fields: [
-          { name: "product_id" },
-        ]
-      },
-      {
-        name: "store_id",
-        using: "BTREE",
-        fields: [
-          { name: "store_id" },
+          { name: "id" },
         ]
       },
     ]
