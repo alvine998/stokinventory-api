@@ -17,6 +17,7 @@ exports.list = async (req, res) => {
                 deleted: { [Op.eq]: 0 },
                 ...req.query.id && { id: { [Op.in]: req.query.id.split(",") } },
                 ...req.query.is_whitelabel && { is_whitelabel: { [Op.eq]: req.query.is_whitelabel } },
+                ...req.query.package_name && { package_name: { [Op.eq]: req.query.package_name } },
                 ...req.query.search && {
                     [Op.or]: [
                         { name: { [Op.like]: `%${req.query.search}%` } },
