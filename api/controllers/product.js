@@ -71,6 +71,7 @@ exports.create = async (req, res) => {
         }
         const payload = {
             ...req.body,
+            partner_code: req.header("x-partner-code")
         };
         const result = await products.create(payload)
         return res.status(200).send({

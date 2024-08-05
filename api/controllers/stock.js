@@ -85,6 +85,7 @@ exports.create = async (req, res) => {
         }
         const payload = {
             ...req.body,
+            partner_code: req.header("x-partner-code")
         };
         const result = await stocks.create(payload)
         if(req.body.type == "out"){

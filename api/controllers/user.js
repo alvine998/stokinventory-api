@@ -78,7 +78,8 @@ exports.create = async (req, res) => {
         const password = await bcrypt.hash(req.body.password, salt)
         const payload = {
             ...req.body,
-            password: password
+            password: password,
+            partner_code: req.header("x-partner-code")
         };
         const result = await users.create(payload)
         return res.status(200).send({
