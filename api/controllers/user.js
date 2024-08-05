@@ -166,8 +166,8 @@ exports.login = async (req, res) => {
                 deleted: { [Op.eq]: 0 },
                 status: { [Op.eq]: 1 },
                 [Op.or]: [
-                    { email: { [Op.eq]: req.query.identity } },
-                    { phone: { [Op.eq]: req.query.identity } }
+                    { email: { [Op.eq]: identity } },
+                    { phone: { [Op.eq]: identity } }
                 ]
             },
         })
@@ -183,8 +183,8 @@ exports.login = async (req, res) => {
                 deleted: { [Op.eq]: 0 },
                 status: { [Op.eq]: 1 },
                 [Op.or]: [
-                    { email: { [Op.eq]: req.query.identity } },
-                    { phone: { [Op.eq]: req.query.identity } }
+                    { email: { [Op.eq]: identity } },
+                    { phone: { [Op.eq]: identity } }
                 ]
             },
             attributes: { exclude: ['deleted', 'password'] },
