@@ -67,8 +67,10 @@ exports.create = async (req, res) => {
         const existUser = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
-                email: { [Op.eq]: req.body.email },
-                phone: { [Op.eq]: req.body.phone }
+                [Op.or]: [
+                    { email: { [Op.eq]: req.body.email } },
+                    { phone: { [Op.eq]: req.body.phone } },
+                ]
             }
         })
         if (existUser) {
