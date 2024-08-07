@@ -56,7 +56,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['product_id', 'product_name', 'product_code', 'store_id', 'store_name', 'store_code', 'qty', 'date', 'type']?.map(value => {
+        ['products', 'qty', 'date', 'type']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
@@ -65,44 +65,50 @@ exports.create = async (req, res) => {
                 })
             }
         })
-        const existProduct = await products.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.product_id }
+        const listProduct = req.body.products
+        listProduct.forEach(async (element) => {
+            const existProduct = await products.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    id: { [Op.eq]: element.id }
+                }
+            })
+            if (!existProduct) {
+                return res.status(400).send({ message: "Produk tidak ditemukan!" })
             }
-        })
-        if (!existProduct) {
-            return res.status(400).send({ message: "Produk tidak ditemukan!" })
-        }
-        const existStore = await stores.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.store_id }
+            if (req.body.type == "out") {
+                const onUpdate = await products.update({ stock: existProduct.stock - req.body.qty }, {
+                    where: {
+                        deleted: { [Op.eq]: 0 },
+                        id: { [Op.eq]: existProduct.id }
+                    }
+                })
+            } else {
+                const onUpdate = await products.update({ stock: existProduct.stock + req.body.qty }, {
+                    where: {
+                        deleted: { [Op.eq]: 0 },
+                        id: { [Op.eq]: existProduct.id }
+                    }
+                })
             }
-        })
-        if (!existStore) {
-            return res.status(400).send({ message: "Toko tidak ditemukan!" })
+        });
+        if (req.body.type == "out") {
+            const existStore = await stores.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    id: { [Op.eq]: req.body.store_id }
+                }
+            })
+            if (!existStore) {
+                return res.status(400).send({ message: "Toko tidak ditemukan!" })
+            }
         }
+
         const payload = {
             ...req.body,
             partner_code: req.header("x-partner-code")
         };
         const result = await stocks.create(payload)
-        if(req.body.type == "out"){
-            const onUpdate = await products.update({stock: existProduct.stock - req.body.qty}, {
-                where: {
-                    deleted: { [Op.eq]: 0 },
-                    id: { [Op.eq]: existProduct.id }
-                }
-            })
-        } else {
-            const onUpdate = await products.update({stock: existProduct.stock + req.body.qty}, {
-                where: {
-                    deleted: { [Op.eq]: 0 },
-                    id: { [Op.eq]: existProduct.id }
-                }
-            })
-        }
         return res.status(200).send({
             status: "success",
             items: result,
@@ -114,53 +120,6 @@ exports.create = async (req, res) => {
         return
     }
 };
-
-exports.update = async (req, res) => {
-    try {
-        const result = await stocks.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id }
-            }
-        })
-        if (!result) {
-            return res.status(400).send({ message: "Data tidak ditemukan!" })
-        }
-        const existProduct = await products.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.product_id }
-            }
-        })
-        if (!existProduct) {
-            return res.status(400).send({ message: "Produk tidak ditemukan!" })
-        }
-        const existStore = await stores.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.store_id }
-            }
-        })
-        if (!existStore) {
-            return res.status(400).send({ message: "Toko tidak ditemukan!" })
-        }
-        let payload = {
-            ...req.body,
-            updated_on: new Date()
-        }
-        const onUpdate = await stocks.update(payload, {
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id }
-            }
-        })
-        res.status(200).send({ message: "Berhasil ubah data", update: onUpdate })
-        return
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
-    }
-}
 
 exports.delete = async (req, res) => {
     try {
@@ -186,7 +145,7 @@ exports.delete = async (req, res) => {
         result.updated_on = new Date()
         await result.save()
 
-        if(result.type == "out"){
+        if (result.type == "out") {
             existProduct.stock = existProduct.stock + result.qty
             await existProduct.save()
         } else {
