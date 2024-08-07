@@ -30,6 +30,5 @@ module.exports = (app) => {
 
     app.get('/stocks', middlewareHere, middlewarePartnerCode, cStock.list);
     app.post('/stock', middlewareHere, middlewarePartnerCode, cStock.create);
-    app.patch('/stock', middlewareHere, middlewarePartnerCode, cStock.update);
     app.delete('/stock', middlewareHere, middlewarePartnerCode, cStock.delete);
 }
