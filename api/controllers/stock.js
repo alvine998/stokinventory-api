@@ -21,7 +21,6 @@ exports.list = async (req, res) => {
                 ...req.query.product_id && { product_id: { [Op.in]: req.query.product_id.split(",") } },
                 ...req.query.store_id && { store_id: { [Op.in]: req.query.store_id.split(",") } },
                 ...req.query.status && { status: { [Op.eq]: req.query.status } },
-                ...req.query.expired == "1" && { expired_at: { [Op.gte]: req.query.date } },
                 ...req.query.type && { type: { [Op.eq]: req.query.type } },
                 ...req.query.search && {
                     [Op.or]: [
@@ -132,26 +131,29 @@ exports.delete = async (req, res) => {
         if (!result) {
             return res.status(404).send({ message: "Data tidak ditemukan!" })
         }
-        const existProduct = await products.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: result.product_id }
+        const products = result.products
+        products.forEach(async (element) => {
+            const existProduct = await products.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    id: { [Op.eq]: element.id }
+                }
+            })
+            if (!existProduct) {
+                return res.status(400).send({ message: "Produk tidak ditemukan!" })
             }
-        })
-        if (!existProduct) {
-            return res.status(400).send({ message: "Produk tidak ditemukan!" })
-        }
+            if (result.type == "out") {
+                existProduct.stock = existProduct.stock + result.qty
+                await existProduct.save()
+            } else {
+                existProduct.stock = existProduct.stock - result.qty
+                await existProduct.save()
+            }
+        });
+
         result.deleted = 1
         result.updated_on = new Date()
         await result.save()
-
-        if (result.type == "out") {
-            existProduct.stock = existProduct.stock + result.qty
-            await existProduct.save()
-        } else {
-            existProduct.stock = existProduct.stock - result.qty
-            await existProduct.save()
-        }
         res.status(200).send({ message: "Berhasil hapus data" })
         return
     } catch (error) {
