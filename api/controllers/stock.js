@@ -174,25 +174,26 @@ exports.delete = async (req, res) => {
         if (!result) {
             return res.status(404).send({ message: "Data tidak ditemukan!" })
         }
-        console.log(result);
-        result.products.forEach(async (element) => {
+        for (const element of result.products) {
             const existProduct = await products.findOne({
                 where: {
                     deleted: { [Op.eq]: 0 },
                     id: { [Op.eq]: element.id }
                 }
-            })
+            });
+
             if (!existProduct) {
-                return res.status(400).send({ message: "Produk tidak ditemukan!" })
+                return res.status(400).send({ message: "Produk tidak ditemukan!" });
             }
-            if (result.type == "out") {
-                existProduct.stock = existProduct.stock + result.qty
-                await existProduct.save()
+
+            if (result.type === "out") {
+                existProduct.stock += result.qty;  // Adjust stock based on the type
             } else {
-                existProduct.stock = existProduct.stock - result.qty
-                await existProduct.save()
+                existProduct.stock -= result.qty;
             }
-        });
+
+            await existProduct.save();  // Save the updated product
+        }
 
         result.deleted = 1
         result.updated_on = new Date()
