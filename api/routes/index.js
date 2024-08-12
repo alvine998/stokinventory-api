@@ -6,6 +6,8 @@ module.exports = (app) => {
     const cStore = require('../controllers/store.js');
     const cPartner = require('../controllers/partner.js');
     const cStock = require('../controllers/stock.js');
+    const cRecipe = require('../controllers/recipe.js');
+    const cSupplier = require('../controllers/supplier.js');
     
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -27,6 +29,16 @@ module.exports = (app) => {
     app.post('/store', middlewareHere, middlewarePartnerCode, cStore.create);
     app.patch('/store', middlewareHere, middlewarePartnerCode, cStore.update);
     app.delete('/store', middlewareHere, middlewarePartnerCode, cStore.delete);
+
+    app.get('/recipes', middlewareHere, middlewarePartnerCode, cRecipe.list);
+    app.post('/recipe', middlewareHere, middlewarePartnerCode, cRecipe.create);
+    app.patch('/recipe', middlewareHere, middlewarePartnerCode, cRecipe.update);
+    app.delete('/recipe', middlewareHere, middlewarePartnerCode, cRecipe.delete);
+
+    app.get('/suppliers', middlewareHere, middlewarePartnerCode, cSupplier.list);
+    app.post('/supplier', middlewareHere, middlewarePartnerCode, cSupplier.create);
+    app.patch('/supplier', middlewareHere, middlewarePartnerCode, cSupplier.update);
+    app.delete('/supplier', middlewareHere, middlewarePartnerCode, cSupplier.delete);
 
     app.get('/stocks', middlewareHere, middlewarePartnerCode, cStock.list);
     app.post('/stock', middlewareHere, middlewarePartnerCode, cStock.create);
