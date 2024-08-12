@@ -174,6 +174,8 @@ exports.delete = async (req, res) => {
         if (!result) {
             return res.status(404).send({ message: "Data tidak ditemukan!" })
         }
+        console.log("result.products:", result.products);
+
         for (const element of result.products) {
             console.log(element);
             const existProduct = await products.findOne({
