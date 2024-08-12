@@ -7,6 +7,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
+    partner_code: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
     name: {
       type: DataTypes.STRING(250),
       allowNull: false
