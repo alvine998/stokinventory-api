@@ -177,17 +177,16 @@ exports.delete = async (req, res) => {
         console.log("result.products:", result.products);
 
         for (const element of result.products) {
-            console.log(element);
             const existProduct = await products.findOne({
                 where: {
                     deleted: { [Op.eq]: 0 },
                     id: { [Op.eq]: element.id }
                 }
             });
-
-            if (!existProduct) {
-                return res.status(400).send({ message: "Produk tidak ditemukan!" });
-            }
+            console.log(existProduct,'exist_product');
+            // if (!existProduct) {
+            //     return res.status(400).send({ message: "Produk tidak ditemukan!" });
+            // }
 
             if (result.type === "out") {
                 existProduct.stock += result.qty;  // Adjust stock based on the type
