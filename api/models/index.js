@@ -12,6 +12,9 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     min: dbConfig.pool.min,
     acquire: dbConfig.pool.acquire,
     idle: dbConfig.pool.idle
+  },
+  dialectOptions: {
+    connectTimeout: 60000 // Increase connection timeout in ms
   }
 });
 
