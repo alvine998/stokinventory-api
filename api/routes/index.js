@@ -9,6 +9,7 @@ module.exports = (app) => {
     const cRecipe = require('../controllers/recipe.js');
     const cSupplier = require('../controllers/supplier.js');
     const cPurchase = require('../controllers/purchase.js');
+    const cDelivery = require('../controllers/delivery.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -45,6 +46,11 @@ module.exports = (app) => {
     app.post('/purchase', middlewareHere, middlewarePartnerCode, cPurchase.create);
     app.patch('/purchase', middlewareHere, middlewarePartnerCode, cPurchase.update);
     app.delete('/purchase', middlewareHere, middlewarePartnerCode, cPurchase.delete);
+
+    app.get('/deliveries', middlewareHere, middlewarePartnerCode, cDelivery.list);
+    app.post('/delivery', middlewareHere, middlewarePartnerCode, cDelivery.create);
+    app.patch('/delivery', middlewareHere, middlewarePartnerCode, cDelivery.update);
+    app.delete('/delivery', middlewareHere, middlewarePartnerCode, cDelivery.delete);
 
     app.get('/stocks', middlewareHere, middlewarePartnerCode, cStock.list);
     app.post('/stock', middlewareHere, middlewarePartnerCode, cStock.create);
