@@ -8,7 +8,8 @@ module.exports = (app) => {
     const cStock = require('../controllers/stock.js');
     const cRecipe = require('../controllers/recipe.js');
     const cSupplier = require('../controllers/supplier.js');
-    
+    const cPurchase = require('../controllers/purchase.js');
+
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
     app.patch('/partner', middlewareHere, cPartner.update);
@@ -39,6 +40,11 @@ module.exports = (app) => {
     app.post('/supplier', middlewareHere, middlewarePartnerCode, cSupplier.create);
     app.patch('/supplier', middlewareHere, middlewarePartnerCode, cSupplier.update);
     app.delete('/supplier', middlewareHere, middlewarePartnerCode, cSupplier.delete);
+
+    app.get('/purchases', middlewareHere, middlewarePartnerCode, cPurchase.list);
+    app.post('/purchase', middlewareHere, middlewarePartnerCode, cPurchase.create);
+    app.patch('/purchase', middlewareHere, middlewarePartnerCode, cPurchase.update);
+    app.delete('/purchase', middlewareHere, middlewarePartnerCode, cPurchase.delete);
 
     app.get('/stocks', middlewareHere, middlewarePartnerCode, cStock.list);
     app.post('/stock', middlewareHere, middlewarePartnerCode, cStock.create);
