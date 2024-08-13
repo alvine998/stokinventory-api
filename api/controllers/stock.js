@@ -168,43 +168,50 @@ exports.delete = async (req, res) => {
         const result = await stocks.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.query.id }
+                id: { [Op.eq]: req.body.id }
             }
         })
         if (!result) {
-            return res.status(404).send({ message: "Data tidak ditemukan!" })
+            return res.status(400).send({ message: "Data tidak ditemukan!" })
         }
-        console.log("result.products:", result.products);
+        let payload = {
+            ...req.body,
+            updated_on: new Date(),
+            deleted: 1
+        }
+        const onUpdate = await stocks.update(payload, {
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id }
+            }
+        })
 
-        for (const element of result.products) {
+        for (const element of req.body.products) {
+
             const existProduct = await products.findOne({
                 where: {
                     deleted: { [Op.eq]: 0 },
                     id: { [Op.eq]: element.id }
                 }
             });
-            console.log(existProduct,'exist_product');
-            // if (!existProduct) {
-            //     return res.status(400).send({ message: "Produk tidak ditemukan!" });
-            // }
 
+            if (!existProduct) {
+                return res.status(400).send({ message: "Produk tidak ditemukan!" })
+            }
+
+            // Safe to access existProduct.stock since existProduct is not null
             if (result.type === "out") {
-                existProduct.stock += result.qty;  // Adjust stock based on the type
+                existProduct.stock += result.qty;
             } else {
                 existProduct.stock -= result.qty;
             }
 
-            await existProduct.save();  // Save the updated product
+            await existProduct.save();
         }
-
-        result.deleted = 1
-        result.updated_on = new Date()
-        await result.save()
-        res.status(200).send({ message: "Berhasil hapus data" })
+        res.status(200).send({ message: "Berhasil ubah data", update: onUpdate })
         return
     } catch (error) {
         console.log(error);
-        res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
-        return
+        return res.status(500).send({ message: "Gagal mendapatkan data", error: error })
     }
 }
