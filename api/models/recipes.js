@@ -27,6 +27,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(250),
       allowNull: true
     },
+    stock: {
+      type: DataTypes.INT,
+      allowNull: false,
+      defaultValue: 0
+    },
     status: {
       type: DataTypes.TINYINT,
       allowNull: false,
