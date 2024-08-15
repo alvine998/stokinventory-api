@@ -174,20 +174,19 @@ exports.delete = async (req, res) => {
         if (!result) {
             return res.status(400).send({ message: "Data tidak ditemukan!" })
         }
-        let payload = {
-            ...req.body,
-            updated_on: new Date(),
-            deleted: 1
-        }
-        const onUpdate = await stocks.update(payload, {
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id }
-            }
-        })
 
         for (const element of req.body.products) {
-
+            let payload = {
+                ...req.body,
+                updated_on: new Date(),
+                deleted: 1
+            }
+            const onUpdate = await stocks.update(payload, {
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    id: { [Op.eq]: req.body.id }
+                }
+            })
             const existProduct = await products.findOne({
                 where: {
                     deleted: { [Op.eq]: 0 },
@@ -208,7 +207,7 @@ exports.delete = async (req, res) => {
 
             await existProduct.save();
         }
-        res.status(200).send({ message: "Berhasil ubah data", update: onUpdate })
+        res.status(200).send({ message: "Berhasil ubah data" })
         return
     } catch (error) {
         console.log(error);
