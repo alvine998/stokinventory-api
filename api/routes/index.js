@@ -54,5 +54,5 @@ module.exports = (app) => {
 
     app.get('/stocks', middlewareHere, middlewarePartnerCode, cStock.list);
     app.post('/stock', middlewareHere, middlewarePartnerCode, cStock.create);
-    app.delete('/stock', middlewareHere, middlewarePartnerCode, cStock.delete);
+    app.patch('/stock', middlewareHere, middlewarePartnerCode, cStock.delete);
 }
