@@ -28,7 +28,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     stock: {
-      type: DataTypes.INT,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
     },
