@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     image: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     delivered_by: {
       type: DataTypes.JSON,

@@ -47,7 +47,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['stocks', 'deliver_at', 'image']?.map(value => {
+        ['stocks', 'deliver_at']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
