@@ -49,7 +49,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     role: {
-      type: DataTypes.ENUM('admin_store','admin_warehouse','super_admin'),
+      type: DataTypes.ENUM('admin_store','admin_warehouse','super_admin','courier'),
       allowNull: false
     },
     is_stokinv_admin: {
