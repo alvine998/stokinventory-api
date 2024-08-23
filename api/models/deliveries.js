@@ -23,7 +23,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(250),
       allowNull: true
     },
-    image: {
+    image_arrived: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    image_deliver: {
       type: DataTypes.TEXT,
       allowNull: true
     },
