@@ -16,11 +16,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     deliver_at: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING(250),
       allowNull: false
     },
     arrived_at: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING(250),
       allowNull: true
     },
     image: {
