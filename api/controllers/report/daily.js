@@ -1,6 +1,7 @@
 
 const db = require('../../models')
 const daily_reports = db.daily_reports
+const products = db.products
 const Op = db.Sequelize.Op
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
