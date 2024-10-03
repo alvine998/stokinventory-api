@@ -8,11 +8,11 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     partner_code: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(250),
       allowNull: false
     },
     trx_code: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     store_id: {
@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     store_name: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(250),
       allowNull: false
     },
     products: {
