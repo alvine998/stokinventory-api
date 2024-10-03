@@ -66,7 +66,7 @@ exports.create = async (req, res) => {
             ...req.body,
             partner_code: req.header("x-partner-code")
         };
-        const listProduct = req.body.products
+        const listProduct = JSON.parse(req.body.products)
         listProduct.forEach(async (element) => {
             const existProduct = await products.findOne({
                 where: {
