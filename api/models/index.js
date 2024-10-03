@@ -32,5 +32,6 @@ db.recipes = require("./recipes.js")(sequelize, Sequelize);
 db.suppliers = require("./suppliers.js")(sequelize, Sequelize);
 db.deliveries = require("./deliveries.js")(sequelize, Sequelize);
 db.purchases = require("./purchases.js")(sequelize, Sequelize);
+db.daily_reports = require("./daily_reports.js")(sequelize, Sequelize);
 
 module.exports = db;

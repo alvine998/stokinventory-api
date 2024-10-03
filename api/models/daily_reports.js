@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('recipes', {
+  return sequelize.define('daily_reports', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -8,34 +8,36 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     partner_code: {
-      type: DataTypes.STRING(250),
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    name: {
-      type: DataTypes.STRING(250),
+    trx_code: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    store_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    store_name: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     products: {
       type: DataTypes.JSON,
       allowNull: false
     },
-    price: {
+    total_product: {
       type: DataTypes.DOUBLE,
       allowNull: false
     },
-    stock: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
+    total_price: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
     },
-    remarks: {
-      type: DataTypes.STRING(250),
-      allowNull: true
-    },
-    status: {
-      type: DataTypes.TINYINT,
-      allowNull: false,
-      defaultValue: 1
+    reported_by: {
+      type: DataTypes.JSON,
+      allowNull: false
     },
     created_on: {
       type: DataTypes.DATE,
@@ -53,7 +55,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'recipes',
+    tableName: 'daily_reports',
     timestamps: false,
     indexes: [
       {
@@ -62,6 +64,27 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "partner_code",
+        using: "BTREE",
+        fields: [
+          { name: "partner_code" },
+        ]
+      },
+      {
+        name: "store_id",
+        using: "BTREE",
+        fields: [
+          { name: "store_id" },
+        ]
+      },
+      {
+        name: "store_name",
+        using: "BTREE",
+        fields: [
+          { name: "store_name" },
         ]
       },
     ]
