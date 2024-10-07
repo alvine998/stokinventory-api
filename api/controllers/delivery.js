@@ -128,7 +128,7 @@ exports.delete = async (req, res) => {
                 const updateStock = await stocks.update({ status: 1 }, {
                     where: {
                         deleted: { [Op.eq]: 0 },
-                        id: { [Op.in]: payload.stocks.map((val) => val.id) },
+                        id: { [Op.in]: result.stocks.map((val) => val.id) },
                         status: 2
                     }
                 })
