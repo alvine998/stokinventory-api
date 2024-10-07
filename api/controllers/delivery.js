@@ -1,6 +1,7 @@
 
 const db = require('../models')
 const deliveries = db.deliveries
+const stocks = db.stocks
 const Op = db.Sequelize.Op
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -61,6 +62,15 @@ exports.create = async (req, res) => {
             partner_code: req.header("x-partner-code")
         };
         const result = await deliveries.create(payload)
+        if (result) {
+            const updateStock = await stocks.update({ status: 2 }, {
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    id: { [Op.in]: payload.stocks.map((val) => val.id) },
+                    status: 1
+                }
+            })
+        }
         return res.status(200).send({
             status: "success",
             items: result,
@@ -112,6 +122,17 @@ exports.delete = async (req, res) => {
         })
         if (!result) {
             return res.status(404).send({ message: "Data tidak ditemukan!" })
+        }
+        if (result) {
+            if (result) {
+                const updateStock = await stocks.update({ status: 1 }, {
+                    where: {
+                        deleted: { [Op.eq]: 0 },
+                        id: { [Op.in]: payload.stocks.map((val) => val.id) },
+                        status: 2
+                    }
+                })
+            }
         }
         result.deleted = 1
         result.updated_on = new Date()
