@@ -140,6 +140,8 @@ exports.delete = async (req, res) => {
         res.status(200).send({ message: "Berhasil hapus data" })
         return
     } catch (error) {
-        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+        console.log(error);
+        res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+        return 
     }
 }
