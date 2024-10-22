@@ -48,7 +48,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     type: {
-      type: DataTypes.ENUM('in','out'),
+      type: DataTypes.ENUM('in','out','refund'),
       allowNull: false
     },
     logs: {
