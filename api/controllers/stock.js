@@ -214,3 +214,31 @@ exports.delete = async (req, res) => {
         return res.status(500).send({ message: "Gagal mendapatkan data", error: error })
     }
 }
+
+exports.createStore = async (req, res) => {
+    try {
+        ['products', 'qty', 'date', 'type']?.map(value => {
+            if (!req.body[value]) {
+                return res.status(400).send({
+                    status: "error",
+                    error_message: "Parameter tidak lengkap " + value,
+                    code: 400
+                })
+            }
+        })
+        const payload = {
+            ...req.body,
+            partner_code: req.header("x-partner-code")
+        };
+        const result = await stocks.create(payload)
+        return res.status(200).send({
+            status: "success",
+            items: result,
+            code: 200
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: "Server mengalami gangguan!", error: error })
+        return
+    }
+}

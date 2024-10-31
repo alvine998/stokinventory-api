@@ -56,6 +56,7 @@ module.exports = (app) => {
     app.get('/stocks', middlewareHere, middlewarePartnerCode, cStock.list);
     app.post('/stock', middlewareHere, middlewarePartnerCode, cStock.create);
     app.patch('/stock', middlewareHere, middlewarePartnerCode, cStock.delete);
+    app.post('/stock/create/store', middlewareHere, middlewarePartnerCode, cStock.createStore);
 
     app.get('/daily/reports', middlewareHere, middlewarePartnerCode, cDailyReport.list);
     app.post('/daily/report', middlewareHere, middlewarePartnerCode, cDailyReport.create);
