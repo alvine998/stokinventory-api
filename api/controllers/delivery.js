@@ -4,6 +4,8 @@ const deliveries = db.deliveries
 const stocks = db.stocks
 const Op = db.Sequelize.Op
 const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
+const { transporter } = require('../../config/mailer')
 require('dotenv').config()
 
 // Retrieve and return all notes from the database.
@@ -62,7 +64,14 @@ exports.create = async (req, res) => {
             partner_code: req.header("x-partner-code")
         };
         const result = await deliveries.create(payload)
+        let info = null;
         if (result) {
+            info = await transporter.sendMail({
+                from: '"Admin" <admin@stokinventory.com>',
+                to: req.body.mailto,
+                subject: "Your upload photo link",
+                text: "Here is your link https://stokinventory.com"
+            })
             const updateStock = await stocks.update({ status: 2 }, {
                 where: {
                     deleted: { [Op.eq]: 0 },
@@ -74,7 +83,8 @@ exports.create = async (req, res) => {
         return res.status(200).send({
             status: "success",
             items: result,
-            code: 200
+            code: 200,
+            mail: info
         })
     } catch (error) {
         console.log(error);
@@ -142,6 +152,6 @@ exports.delete = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
-        return 
+        return
     }
 }
