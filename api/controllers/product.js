@@ -92,8 +92,7 @@ exports.update = async (req, res) => {
         const result = await products.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id },
-                code: { [Op.eq]: req.body.code }
+                id: { [Op.eq]: req.body.id }
             }
         })
         if (!result) {
