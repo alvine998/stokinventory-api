@@ -51,15 +51,16 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'code', 'price', 'unit']?.map(value => {
-            if (!req.body[value]) {
+        const requiredFields = ['name', 'code', 'price', 'unit', 'selling_price'];
+        for (const field of requiredFields) {
+            if (!req.body[field]) {
                 return res.status(400).send({
                     status: "error",
-                    error_message: "Parameter tidak lengkap " + value,
+                    error_message: "Parameter tidak lengkap " + field,
                     code: 400
-                })
+                });
             }
-        })
+        }
         const existUser = await products.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },

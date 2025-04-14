@@ -60,6 +60,13 @@ module.exports = function(sequelize, DataTypes) {
           { name: "id" },
         ]
       },
+      {
+        name: "deleted",
+        using: "BTREE",
+        fields: [
+          { name: "deleted" },
+        ]
+      },
     ]
   });
 };

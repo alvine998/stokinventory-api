@@ -46,7 +46,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['products', 'total_qty', 'total_price']?.map(value => {
+        ['products', 'total_qty', 'total_price'].forEach(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",

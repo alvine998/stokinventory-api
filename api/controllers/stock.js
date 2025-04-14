@@ -98,15 +98,15 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['products', 'qty', 'date', 'type']?.map(value => {
+        for (const value of ['products', 'qty', 'date', 'type']) {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
                     error_message: "Parameter tidak lengkap " + value,
                     code: 400
-                })
+                });
             }
-        })
+        }
         const listProduct = req.body.products
         listProduct.forEach(async (element) => {
             const existProduct = await products.findOne({

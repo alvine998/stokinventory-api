@@ -51,15 +51,16 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'package_name']?.map(value => {
+        const requiredFields = ['name', 'package_name'];
+        for (const value of requiredFields) {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
                     error_message: "Parameter tidak lengkap " + value,
                     code: 400
-                })
+                });
             }
-        })
+        }
         const existUser = await partners.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },

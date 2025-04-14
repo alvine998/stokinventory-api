@@ -58,6 +58,20 @@ module.exports = function(sequelize, DataTypes) {
           { name: "id" },
         ]
       },
+      {
+        name: "partner_code",
+        using: "BTREE",
+        fields: [
+          { name: "partner_code" },
+        ]
+      },
+      {
+        name: "deleted",
+        using: "BTREE",
+        fields: [
+          { name: "deleted" },
+        ]
+      },
     ]
   });
 };

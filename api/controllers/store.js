@@ -50,15 +50,15 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'code']?.map(value => {
+        for (const value of ['name', 'code']) {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
                     error_message: "Parameter tidak lengkap " + value,
                     code: 400
-                })
+                });
             }
-        })
+        }
         const existUser = await stores.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },

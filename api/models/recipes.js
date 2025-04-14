@@ -9,7 +9,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     partner_code: {
       type: DataTypes.STRING(250),
-      allowNull: false
+      allowNull: false,
+      unique: "partner_code"
     },
     name: {
       type: DataTypes.STRING(250),
@@ -62,6 +63,21 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "partner_code",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "partner_code" },
+        ]
+      },
+      {
+        name: "deleted",
+        using: "BTREE",
+        fields: [
+          { name: "deleted" },
         ]
       },
     ]

@@ -50,15 +50,16 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'price', 'products']?.map(value => {
-            if (!req.body[value]) {
+        const requiredFields = ['name', 'price', 'products'];
+        for (const field of requiredFields) {
+            if (!req.body[field]) {
                 return res.status(400).send({
                     status: "error",
-                    error_message: "Parameter tidak lengkap " + value,
+                    error_message: "Parameter tidak lengkap " + field,
                     code: 400
-                })
+                });
             }
-        })
+        }
         const payload = {
             ...req.body,
             partner_code: req.header("x-partner-code")

@@ -8,11 +8,11 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     partner_code: {
-      type: DataTypes.STRING(250),
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     trx_code: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     store_id: {
@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     store_name: {
-      type: DataTypes.STRING(250),
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     products: {
@@ -85,6 +85,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "store_name" },
+        ]
+      },
+      {
+        name: "deleted",
+        using: "BTREE",
+        fields: [
+          { name: "deleted" },
         ]
       },
     ]

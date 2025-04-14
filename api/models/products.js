@@ -23,6 +23,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DOUBLE,
       allowNull: false
     },
+    selling_price: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
     moq: {
       type: DataTypes.INTEGER,
       allowNull: true
@@ -49,10 +53,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     },
-    deleted: {
-      type: DataTypes.TINYINT,
-      allowNull: false,
-      defaultValue: 0
+    deleted_on: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     sequelize,
@@ -65,6 +68,20 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "partner_code",
+        using: "BTREE",
+        fields: [
+          { name: "partner_code" },
+        ]
+      },
+      {
+        name: "deleted",
+        using: "BTREE",
+        fields: [
+          { name: "deleted_on" },
         ]
       },
     ]

@@ -48,7 +48,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     type: {
-      type: DataTypes.ENUM('in','out','refund'),
+      type: DataTypes.ENUM('in','out'),
       allowNull: false
     },
     logs: {
@@ -85,6 +85,20 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "partner_code",
+        using: "BTREE",
+        fields: [
+          { name: "partner_code" },
+        ]
+      },
+      {
+        name: "deleted",
+        using: "BTREE",
+        fields: [
+          { name: "deleted" },
         ]
       },
     ]
