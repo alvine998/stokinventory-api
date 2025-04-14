@@ -53,9 +53,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     },
-    deleted_on: {
-      type: DataTypes.DATE,
-      allowNull: true
+    deleted: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+      defaultValue: 0
     }
   }, {
     sequelize,
@@ -81,7 +82,7 @@ module.exports = function(sequelize, DataTypes) {
         name: "deleted",
         using: "BTREE",
         fields: [
-          { name: "deleted_on" },
+          { name: "deleted" },
         ]
       },
     ]
