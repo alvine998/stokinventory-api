@@ -134,17 +134,6 @@ exports.create = async (req, res) => {
                 })
             }
         });
-        if (req.body.type == "out") {
-            const existStore = await stores.findOne({
-                where: {
-                    deleted: { [Op.eq]: 0 },
-                    id: { [Op.eq]: req.body.store_id }
-                }
-            })
-            if (!existStore) {
-                return res.status(400).send({ message: "Toko tidak ditemukan!" })
-            }
-        }
 
         const payload = {
             ...req.body,
@@ -200,9 +189,9 @@ exports.delete = async (req, res) => {
 
             // Safe to access existProduct.stock since existProduct is not null
             if (result.type === "out") {
-                existProduct.stock += result.qty;
+                existProduct.stock += element.qty;
             } else {
-                existProduct.stock -= result.qty;
+                existProduct.stock -= element.qty;
             }
 
             await existProduct.save();
