@@ -119,14 +119,14 @@ exports.create = async (req, res) => {
                 return res.status(400).send({ message: "Produk tidak ditemukan!" })
             }
             if (req.body.type == "out") {
-                const onUpdate = await products.update({ stock: existProduct.stock - req.body.qty }, {
+                const onUpdate = await products.update({ stock: existProduct.stock - element.qty }, {
                     where: {
                         deleted: { [Op.eq]: 0 },
                         id: { [Op.eq]: existProduct.id }
                     }
                 })
             } else {
-                const onUpdate = await products.update({ stock: existProduct.stock + req.body.qty }, {
+                const onUpdate = await products.update({ stock: existProduct.stock + element.qty }, {
                     where: {
                         deleted: { [Op.eq]: 0 },
                         id: { [Op.eq]: existProduct.id }
@@ -206,15 +206,15 @@ exports.delete = async (req, res) => {
 
 exports.createStore = async (req, res) => {
     try {
-        ['products', 'qty', 'date', 'type']?.map(value => {
+        for (const value of ['products', 'qty', 'date', 'type']) {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
                     error_message: "Parameter tidak lengkap " + value,
                     code: 400
-                })
+                });
             }
-        })
+        }
         const payload = {
             ...req.body,
             partner_code: req.header("x-partner-code")
