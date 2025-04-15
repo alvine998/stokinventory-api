@@ -1,19 +1,20 @@
-FROM node:lts-alpine3.16
+# Use an official Node.js runtime as a parent image
+FROM node:18-alpine
 
-# Create app directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
 
-# Bundle app source
+# Copy the rest of the application
 COPY . .
 
-EXPOSE 8082
-CMD [ "npm", "run", "start" ]
+# Expose port 4002 to the outside
+EXPOSE 4005
+
+# Define the command to run the app
+CMD ["node", "index.js"]

@@ -1,21 +1,16 @@
-# docker-compose.yml
-
-version: "3"
+version: '3.8'
 
 services:
-  api:
-    networks:
-      - proxynet
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - "./upload/images/:/app/upload/images/"
+  express-app:
+    container_name: stokinventory-api
+    build: .
     ports:
-      - "8082:8082"
+      - "4005:4005"
+    volumes:
+      - .:/app
+      - /app/node_modules
     environment:
-      - NODE_ENV=production
-
+      - NODE_ENV=development
 networks:
-  proxynet:
-    name: custom_network2
+  web:
+    external: true
