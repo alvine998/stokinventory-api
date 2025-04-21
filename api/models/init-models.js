@@ -8,6 +8,8 @@ var _recipes = require("./recipes");
 var _stocks = require("./stocks");
 var _stores = require("./stores");
 var _suppliers = require("./suppliers");
+var _transaction_details = require("./transaction_details");
+var _transactions = require("./transactions");
 var _users = require("./users");
 
 function initModels(sequelize) {
@@ -20,6 +22,8 @@ function initModels(sequelize) {
   var stocks = _stocks(sequelize, DataTypes);
   var stores = _stores(sequelize, DataTypes);
   var suppliers = _suppliers(sequelize, DataTypes);
+  var transaction_details = _transaction_details(sequelize, DataTypes);
+  var transactions = _transactions(sequelize, DataTypes);
   var users = _users(sequelize, DataTypes);
 
 
@@ -33,6 +37,8 @@ function initModels(sequelize) {
     stocks,
     stores,
     suppliers,
+    transaction_details,
+    transactions,
     users,
   };
 }

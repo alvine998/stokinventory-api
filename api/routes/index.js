@@ -11,6 +11,8 @@ module.exports = (app) => {
     const cPurchase = require('../controllers/purchase.js');
     const cDelivery = require('../controllers/delivery.js');
     const cDailyReport = require('../controllers/report/daily.js');
+    const cTransaction = require('../controllers/transaction.js');
+    const cTransactionDetail = require('../controllers/transaction_detail.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -62,4 +64,8 @@ module.exports = (app) => {
     app.post('/daily/report', middlewareHere, middlewarePartnerCode, cDailyReport.create);
     app.patch('/daily/report', middlewareHere, middlewarePartnerCode, cDailyReport.update);
     app.delete('/daily/report', middlewareHere, middlewarePartnerCode, cDailyReport.delete);
+
+    app.get('/transactions', middlewareHere, middlewarePartnerCode, cTransaction.list);
+    app.post('/transaction', middlewareHere, middlewarePartnerCode, cTransaction.create);
+    app.patch('/transaction', middlewareHere, middlewarePartnerCode, cTransaction.delete);
 }
