@@ -28,6 +28,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: 1
     },
+    type: {
+      type: DataTypes.ENUM('distribution','direct'),
+      allowNull: false,
+      defaultValue: "direct"
+    },
     status: {
       type: DataTypes.TINYINT,
       allowNull: false,
