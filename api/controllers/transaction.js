@@ -65,6 +65,7 @@ exports.listTransactionDetails = async (req, res) => {
                 deleted: { [Op.eq]: 0 },
                 partner_code: { [Op.eq]: req.header("x-partner-code") },
                 ...req.query.id && { id: { [Op.in]: req.query.id.split(",") } },
+                ...req.query.trx_code && { trx_code: { [Op.in]: req.query.trx_code.split(",") } },
                 ...req.query.search && {
                     [Op.or]: [
                         { product_name: { [Op.like]: `%${req.query.search}%` } },
