@@ -66,6 +66,7 @@ module.exports = (app) => {
     app.delete('/daily/report', middlewareHere, middlewarePartnerCode, cDailyReport.delete);
 
     app.get('/transactions', middlewareHere, middlewarePartnerCode, cTransaction.list);
+    app.get('/transaction/details', middlewareHere, middlewarePartnerCode, cTransaction.listTransactionDetails);
     app.post('/transaction', middlewareHere, middlewarePartnerCode, cTransaction.create);
     app.patch('/transaction', middlewareHere, middlewarePartnerCode, cTransaction.delete);
 }
